@@ -1,3 +1,5 @@
+package tech.test.surveys;
+
 import android.app.Application;
 
 import tech.test.surveys.util.Contextor;
