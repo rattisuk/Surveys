@@ -4,6 +4,7 @@ import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
+import tech.test.surveys.dao.SurveyItemDao;
 import tech.test.surveys.manager.SurveyItemsManager;
 import tech.test.surveys.view.SurveyScreenItem;
 
@@ -25,7 +26,13 @@ public class SurveyScreenPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        View v = new SurveyScreenItem(container.getContext());
+        SurveyScreenItem v = new SurveyScreenItem(container.getContext());
+
+        SurveyItemDao dao = SurveyItemsManager.getInstance().getDaos()[position];
+        v.setTitleText(dao.getTitle());
+        v.setDescriptionText(dao.getDescription());
+        v.setImgUrl(dao.getCoverImageUrl());
+
         container.addView(v);
         return v;
     }

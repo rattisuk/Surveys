@@ -3,7 +3,9 @@ package tech.test.surveys.view;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import tech.test.surveys.R;
 
@@ -11,6 +13,10 @@ import tech.test.surveys.R;
  * Created by GOLF on 7/17/2016.
  */
 public class SurveyScreenItem extends RelativeLayout {
+
+    TextView tvTitle;
+    TextView tvDescription;
+    ImageView ivImg;
 
     public SurveyScreenItem(Context context) {
         super(context);
@@ -38,9 +44,24 @@ public class SurveyScreenItem extends RelativeLayout {
     }
 
     private void initInstances() {
+        tvTitle = (TextView) findViewById(R.id.tvTitle);
+        tvDescription = (TextView) findViewById(R.id.tvDescription);
+        ivImg = (ImageView) findViewById(R.id.ivImg);
     }
 
     private void initWithAttrs(AttributeSet attrs) {
 
+    }
+
+    public void setTitleText(String text) {
+        tvTitle.setText(text);
+    }
+
+    public void setDescriptionText(String text) {
+        tvDescription.setText(text);
+    }
+
+    public void setImgUrl(String url) {
+        //TODO: Load Image
     }
 }
