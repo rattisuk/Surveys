@@ -28,11 +28,9 @@ public class HTTPManager {
         return instance;
     }
 
-    private Context mContext;
     private APIService service;
 
     private HTTPManager() {
-        mContext = Contextor.getInstance().getContext();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
