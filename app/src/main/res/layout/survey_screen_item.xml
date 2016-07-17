@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/ivImg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@android:drawable/screen_background_dark" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/surveys_screen_padding"
+        android:weightSum="8">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="bottom|center"
+            android:text="@string/surveys_screen_item_title"
+            android:textColor="@color/surveys_screen_title_text_color"
+            android:textSize="@dimen/surveys_screen_title_text_size"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:gravity="top|center"
+            android:text="@string/surveys_screen_item_description"
+            android:textColor="@color/surveys_screen_description_text_color"
+            android:textSize="@dimen/surveys_screen_description_text_size"
+            android:textStyle="bold" />
+    </LinearLayout>
+</RelativeLayout>
