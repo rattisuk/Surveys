@@ -12,7 +12,7 @@ import tech.test.surveys.view.SurveyScreenItem;
 public class SurveyScreenPagerAdapter extends PagerAdapter {
     @Override
     public int getCount() {
-        return 100;
+        return 20;
     }
 
     @Override

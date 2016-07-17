@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+import com.viewpagerindicator.CirclePageIndicator;
+
 import tech.test.surveys.R;
 import tech.test.surveys.adapter.SurveyScreenPagerAdapter;
 import tech.test.surveys.view.VerticalViewPager;
@@ -17,6 +19,7 @@ import tech.test.surveys.view.VerticalViewPager;
 public class MainFragment extends Fragment {
 
     VerticalViewPager viewPagerVertical;
+    CirclePageIndicator pageIndicatorCircle;
 
     public MainFragment() {
         super();
@@ -41,6 +44,10 @@ public class MainFragment extends Fragment {
 
         viewPagerVertical = (VerticalViewPager) rootView.findViewById(R.id.viewPagerVertical);
         viewPagerVertical.setAdapter(new SurveyScreenPagerAdapter());
+
+        pageIndicatorCircle = (CirclePageIndicator) rootView.findViewById(R.id.pageIndicatorCircle);
+        pageIndicatorCircle.setViewPager(viewPagerVertical);
+        //TODO: handle on touch/swipe inside indicator
     }
 
     @Override
