@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <fr.castorflex.android.verticalviewpager.VerticalViewPager
+    <tech.test.surveys.view.VerticalViewPager
         android:id="@+id/viewPagerVertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

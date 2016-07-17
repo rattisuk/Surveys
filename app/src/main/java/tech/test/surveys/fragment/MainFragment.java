@@ -7,9 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-import fr.castorflex.android.verticalviewpager.VerticalViewPager;
 import tech.test.surveys.R;
 import tech.test.surveys.adapter.SurveyScreenPagerAdapter;
+import tech.test.surveys.view.VerticalViewPager;
 
 /**
  * Created by GOLF on 7/16/2016.
