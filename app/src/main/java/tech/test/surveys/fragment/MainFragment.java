@@ -10,12 +10,17 @@ import android.widget.Toast;
 
 import com.viewpagerindicator.CirclePageIndicator;
 
+import java.io.IOException;
+
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import tech.test.surveys.R;
 import tech.test.surveys.adapter.SurveyScreenPagerAdapter;
-import tech.test.surveys.callback.SurveyItemDaosCallback;
 import tech.test.surveys.dao.SurveyItemDao;
+import tech.test.surveys.manager.SurveyItemsManager;
 import tech.test.surveys.manager.http.HTTPManager;
+import tech.test.surveys.util.Contextor;
 import tech.test.surveys.view.VerticalViewPager;
 
 /**
@@ -60,7 +65,29 @@ public class MainFragment extends Fragment {
 
     private void loadSurveysData() {
         Call<SurveyItemDao[]> call = HTTPManager.getInstance().getService().loadSurveyList("6eebeac3dd1dc9c97a06985b6480471211a777b39aa4d0e03747ce6acc4a3369");
-        call.enqueue(new SurveyItemDaosCallback());
+        call.enqueue(new Callback<SurveyItemDao[]>() {
+            @Override
+            public void onResponse(Call<SurveyItemDao[]> call, Response<SurveyItemDao[]> response) {
+                if (response.isSuccessful()) {
+                    SurveyItemDao[] daos = response.body();
+                    SurveyItemsManager.getInstance().setDaos(daos);
+                    viewPagerVertical.getAdapter().notifyDataSetChanged();
+                    Toast.makeText(Contextor.getInstance().getContext(), "load success : " + daos.length + " item.", Toast.LENGTH_SHORT).show();
+                } else {
+                    try {
+                        Toast.makeText(Contextor.getInstance().getContext(), response.errorBody().string(), Toast.LENGTH_SHORT).show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SurveyItemDao[]> call, Throwable t) {
+                Toast.makeText(Contextor.getInstance().getContext(), t.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

@@ -4,6 +4,7 @@ import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
+import tech.test.surveys.manager.SurveyItemsManager;
 import tech.test.surveys.view.SurveyScreenItem;
 
 /**
@@ -12,7 +13,9 @@ import tech.test.surveys.view.SurveyScreenItem;
 public class SurveyScreenPagerAdapter extends PagerAdapter {
     @Override
     public int getCount() {
-        return 20;
+        if (SurveyItemsManager.getInstance().getDaos() == null)
+            return 0;
+        return SurveyItemsManager.getInstance().getDaos().length;
     }
 
     @Override
