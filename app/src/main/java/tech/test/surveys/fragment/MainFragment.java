@@ -18,7 +18,6 @@ import retrofit2.Response;
 import tech.test.surveys.R;
 import tech.test.surveys.adapter.SurveyScreenPagerAdapter;
 import tech.test.surveys.dao.SurveyItemDao;
-import tech.test.surveys.manager.SurveyItemsManager;
 import tech.test.surveys.manager.http.HTTPManager;
 import tech.test.surveys.util.Contextor;
 import tech.test.surveys.view.VerticalViewPager;
@@ -29,6 +28,7 @@ import tech.test.surveys.view.VerticalViewPager;
 public class MainFragment extends Fragment {
 
     VerticalViewPager viewPagerVertical;
+    SurveyScreenPagerAdapter surveyViewPagerAdapter;
     CirclePageIndicator pageIndicatorCircle;
 
     public MainFragment() {
@@ -53,7 +53,8 @@ public class MainFragment extends Fragment {
     private void initInstances(View rootView) {
 
         viewPagerVertical = (VerticalViewPager) rootView.findViewById(R.id.viewPagerVertical);
-        viewPagerVertical.setAdapter(new SurveyScreenPagerAdapter());
+        surveyViewPagerAdapter = new SurveyScreenPagerAdapter();
+        viewPagerVertical.setAdapter(surveyViewPagerAdapter);
 
         pageIndicatorCircle = (CirclePageIndicator) rootView.findViewById(R.id.pageIndicatorCircle);
         pageIndicatorCircle.setViewPager(viewPagerVertical);
@@ -70,7 +71,7 @@ public class MainFragment extends Fragment {
             public void onResponse(Call<SurveyItemDao[]> call, Response<SurveyItemDao[]> response) {
                 if (response.isSuccessful()) {
                     SurveyItemDao[] daos = response.body();
-                    SurveyItemsManager.getInstance().setDaos(daos);
+                    surveyViewPagerAdapter.setDaos(daos);
                     viewPagerVertical.getAdapter().notifyDataSetChanged();
                     Toast.makeText(Contextor.getInstance().getContext(), "load success : " + daos.length + " item.", Toast.LENGTH_SHORT).show();
                 } else {
