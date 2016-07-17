@@ -9,6 +9,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import tech.test.surveys.dao.SurveyItemDao;
+import tech.test.surveys.manager.SurveyItemsManager;
 
 /**
  * Created by GOLF on 7/18/2016.
@@ -19,8 +20,9 @@ public class SurveyItemDaosCallback implements Callback<SurveyItemDao[]> {
     @Override
     public void onResponse(Call<SurveyItemDao[]> call, Response<SurveyItemDao[]> response) {
         if (response.isSuccessful()) {
-            SurveyItemDao[] dao = response.body();
-            Log.d(TAG, "load success : " + dao.length + " item.");
+            SurveyItemDao[] daos = response.body();
+            SurveyItemsManager.getInstance().setDaos(daos);
+            Log.d(TAG, "load success : " + daos.length + " item.");
         } else {
             try {
                 Log.d(TAG, response.errorBody().string());
