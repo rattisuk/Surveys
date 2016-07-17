@@ -3,7 +3,7 @@ package tech.test.surveys.manager.http;
 import java.util.Objects;
 
 import retrofit2.Call;
-import retrofit2.http.POST;
+import retrofit2.http.GET;
 import retrofit2.http.Query;
 import tech.test.surveys.dao.SurveyItemDao;
 
@@ -12,6 +12,6 @@ import tech.test.surveys.dao.SurveyItemDao;
  */
 public interface APIService {
 
-    @POST("surveys.json")
+    @GET("surveys.json")
     Call<SurveyItemDao[]> loadSurveyList(@Query("access_token") String access_token);
 }

@@ -5,12 +5,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 
 import com.viewpagerindicator.CirclePageIndicator;
 
+import retrofit2.Call;
 import tech.test.surveys.R;
 import tech.test.surveys.adapter.SurveyScreenPagerAdapter;
+import tech.test.surveys.callback.SurveyItemDaosCallback;
+import tech.test.surveys.dao.SurveyItemDao;
+import tech.test.surveys.manager.http.HTTPManager;
 import tech.test.surveys.view.VerticalViewPager;
 
 /**
@@ -48,6 +53,14 @@ public class MainFragment extends Fragment {
         pageIndicatorCircle = (CirclePageIndicator) rootView.findViewById(R.id.pageIndicatorCircle);
         pageIndicatorCircle.setViewPager(viewPagerVertical);
         //TODO: handle on touch/swipe inside indicator
+
+        loadSurveysData();
+
+    }
+
+    private void loadSurveysData() {
+        Call<SurveyItemDao[]> call = HTTPManager.getInstance().getService().loadSurveyList("6eebeac3dd1dc9c97a06985b6480471211a777b39aa4d0e03747ce6acc4a3369");
+        call.enqueue(new SurveyItemDaosCallback());
     }
 
     @Override
