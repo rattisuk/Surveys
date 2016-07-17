@@ -7,6 +7,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import tech.test.surveys.R;
 
 /**
@@ -62,6 +64,8 @@ public class SurveyScreenItem extends RelativeLayout {
     }
 
     public void setImgUrl(String url) {
-        //TODO: Load Image
+        Picasso.with(getContext())
+                .load(url+'l')
+                .into(ivImg);
     }
 }
