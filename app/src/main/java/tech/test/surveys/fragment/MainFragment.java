@@ -6,12 +6,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
+import fr.castorflex.android.verticalviewpager.VerticalViewPager;
 import tech.test.surveys.R;
+import tech.test.surveys.adapter.SurveyScreenPagerAdapter;
 
 /**
  * Created by GOLF on 7/16/2016.
  */
 public class MainFragment extends Fragment {
+
+    VerticalViewPager viewPagerVertical;
 
     public MainFragment() {
         super();
@@ -34,6 +39,8 @@ public class MainFragment extends Fragment {
 
     private void initInstances(View rootView) {
 
+        viewPagerVertical = (VerticalViewPager) rootView.findViewById(R.id.viewPagerVertical);
+        viewPagerVertical.setAdapter(new SurveyScreenPagerAdapter());
     }
 
     @Override
