@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 
@@ -30,6 +33,7 @@ public class MainFragment extends Fragment {
     VerticalViewPager viewPagerVertical;
     SurveyScreenPagerAdapter surveyViewPagerAdapter;
     CirclePageIndicator pageIndicatorCircle;
+    ImageButton ibRefresh;
 
     public MainFragment() {
         super();
@@ -60,6 +64,16 @@ public class MainFragment extends Fragment {
         pageIndicatorCircle.setViewPager(viewPagerVertical);
         //TODO: handle on touch/swipe inside indicator
 
+        ibRefresh = (ImageButton) getActivity().findViewById(R.id.toolbar).findViewById(R.id.ibLeft);
+        ibRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startRefreshAnimation();
+                loadSurveysData();
+            }
+        });
+
+        startRefreshAnimation();
         loadSurveysData();
 
     }
@@ -69,10 +83,12 @@ public class MainFragment extends Fragment {
         call.enqueue(new Callback<SurveyItemDao[]>() {
             @Override
             public void onResponse(Call<SurveyItemDao[]> call, Response<SurveyItemDao[]> response) {
+                stopRefreshAnimation();
                 if (response.isSuccessful()) {
                     SurveyItemDao[] daos = response.body();
                     surveyViewPagerAdapter.setDaos(daos);
                     viewPagerVertical.getAdapter().notifyDataSetChanged();
+                    if (daos.length > 0) viewPagerVertical.setCurrentItem(0);
                     Toast.makeText(Contextor.getInstance().getContext(), "load success : " + daos.length + " item.", Toast.LENGTH_SHORT).show();
                 } else {
                     try {
@@ -86,20 +102,21 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onFailure(Call<SurveyItemDao[]> call, Throwable t) {
+                stopRefreshAnimation();
                 Toast.makeText(Contextor.getInstance().getContext(), t.toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
+    private void startRefreshAnimation() {
+        Animation anim = AnimationUtils.loadAnimation(getContext(), R.anim.rotate);
+        ibRefresh.startAnimation(anim);
+        ibRefresh.setClickable(false);
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
+    private void stopRefreshAnimation() {
+        ibRefresh.clearAnimation();
+        ibRefresh.setClickable(true);
     }
-
 
 }
