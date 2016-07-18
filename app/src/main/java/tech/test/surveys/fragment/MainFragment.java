@@ -1,5 +1,6 @@
 package tech.test.surveys.fragment;
 
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -38,6 +39,8 @@ public class MainFragment extends Fragment {
     ImageButton ibRefresh;
     Button btnTakeSurvey;
 
+    SurveyItemDao[] daos = null;
+
     public MainFragment() {
         super();
     }
@@ -50,17 +53,36 @@ public class MainFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null)
+            onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArray("daos", daos);
+    }
+
+    private void onRestoreInstanceState(Bundle savedInstanceState) {
+        daos = (SurveyItemDao[]) savedInstanceState.getParcelableArray("daos");
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        initInstances(rootView);
+        initInstances(rootView, savedInstanceState);
         return rootView;
     }
 
-    private void initInstances(View rootView) {
+    private void initInstances(View rootView, Bundle savedInstanceState) {
 
         viewPagerVertical = (VerticalViewPager) rootView.findViewById(R.id.viewPagerVertical);
         surveyViewPagerAdapter = new SurveyScreenPagerAdapter();
+        surveyViewPagerAdapter.setDaos(daos);
         viewPagerVertical.setAdapter(surveyViewPagerAdapter);
 
         pageIndicatorCircle = (CirclePageIndicator) rootView.findViewById(R.id.pageIndicatorCircle);
@@ -74,19 +96,21 @@ public class MainFragment extends Fragment {
         ibRefresh.setImageResource(R.drawable.ic_refresh_white_36dp);
         ibRefresh.setOnClickListener(refreshOnClickListener);
 
-        startRefreshAnimation();
-        loadSurveysData();
+        if (savedInstanceState == null)
+            loadSurveysData();
 
     }
 
     private void loadSurveysData() {
+        startRefreshAnimation();
+
         Call<SurveyItemDao[]> call = HTTPManager.getInstance().getService().loadSurveyList("6eebeac3dd1dc9c97a06985b6480471211a777b39aa4d0e03747ce6acc4a3369");
         call.enqueue(new Callback<SurveyItemDao[]>() {
             @Override
             public void onResponse(Call<SurveyItemDao[]> call, Response<SurveyItemDao[]> response) {
                 stopRefreshAnimation();
                 if (response.isSuccessful()) {
-                    SurveyItemDao[] daos = response.body();
+                    daos = response.body();
                     surveyViewPagerAdapter.setDaos(daos);
                     viewPagerVertical.getAdapter().notifyDataSetChanged();
                     if (daos.length > 0) viewPagerVertical.setCurrentItem(0);
@@ -123,7 +147,6 @@ public class MainFragment extends Fragment {
     private View.OnClickListener refreshOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            startRefreshAnimation();
             loadSurveysData();
         }
     };
@@ -133,11 +156,12 @@ public class MainFragment extends Fragment {
         public void onClick(View view) {
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             Fragment showingFragment = fragmentManager.findFragmentById(R.id.contentContainer);
-            if(!(showingFragment instanceof  SecondFragment))
-            fragmentManager.beginTransaction()
-                    .replace(R.id.contentContainer,SecondFragment.newInstance())
-                    .addToBackStack(null)
-                    .commit();
+            if (!(showingFragment instanceof SecondFragment)) {
+                fragmentManager.beginTransaction()
+                        .replace(R.id.contentContainer, SecondFragment.newInstance())
+                        .addToBackStack(null)
+                        .commit();
+            }
         }
     };
 }
