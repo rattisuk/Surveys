@@ -71,6 +71,7 @@ public class MainFragment extends Fragment {
         btnTakeSurvey.setOnClickListener(takeSurveyOnclickListener);
 
         ibRefresh = (ImageButton) getActivity().findViewById(R.id.toolbar).findViewById(R.id.ibLeft);
+        ibRefresh.setImageResource(R.drawable.ic_refresh_white_36dp);
         ibRefresh.setOnClickListener(refreshOnClickListener);
 
         startRefreshAnimation();
