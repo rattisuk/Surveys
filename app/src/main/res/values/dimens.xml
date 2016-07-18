@@ -5,5 +5,6 @@
     <dimen name="surveys_screen_padding">16dp</dimen>
     <dimen name="surveys_screen_title_text_size">36sp</dimen>
     <dimen name="surveys_screen_description_text_size">24sp</dimen>
+    <dimen name="surveys_screen_btn_text_size">18sp</dimen>
     <dimen name="page_indicator_radius">8dp</dimen>
 </resources>
