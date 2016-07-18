@@ -38,7 +38,6 @@ public class MainFragment extends Fragment {
     ImageButton ibRefresh;
     Button btnTakeSurvey;
 
-
     public MainFragment() {
         super();
     }
@@ -72,13 +71,7 @@ public class MainFragment extends Fragment {
         btnTakeSurvey.setOnClickListener(takeSurveyOnclickListener);
 
         ibRefresh = (ImageButton) getActivity().findViewById(R.id.toolbar).findViewById(R.id.ibLeft);
-        ibRefresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startRefreshAnimation();
-                loadSurveysData();
-            }
-        });
+        ibRefresh.setOnClickListener(refreshOnClickListener);
 
         startRefreshAnimation();
         loadSurveysData();
@@ -125,6 +118,14 @@ public class MainFragment extends Fragment {
         ibRefresh.clearAnimation();
         ibRefresh.setClickable(true);
     }
+
+    private View.OnClickListener refreshOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            startRefreshAnimation();
+            loadSurveysData();
+        }
+    };
 
     private View.OnClickListener takeSurveyOnclickListener = new View.OnClickListener() {
         @Override
