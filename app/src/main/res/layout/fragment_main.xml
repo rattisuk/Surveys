@@ -20,4 +20,17 @@
         android:orientation="vertical"
         android:padding="1dp"
         app:radius="@dimen/page_indicator_radius" />
+
+    <Button
+        android:id="@+id/btnTakeSurvey"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="80dp"
+        android:background="@drawable/btn_take_survey"
+        android:text="@string/surveys_screen_btn_title"
+        android:textSize="@dimen/surveys_screen_btn_text_size"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white" />
 </RelativeLayout>

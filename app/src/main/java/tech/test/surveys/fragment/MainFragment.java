@@ -2,11 +2,13 @@ package tech.test.surveys.fragment;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -34,6 +36,8 @@ public class MainFragment extends Fragment {
     SurveyScreenPagerAdapter surveyViewPagerAdapter;
     CirclePageIndicator pageIndicatorCircle;
     ImageButton ibRefresh;
+    Button btnTakeSurvey;
+
 
     public MainFragment() {
         super();
@@ -63,6 +67,9 @@ public class MainFragment extends Fragment {
         pageIndicatorCircle = (CirclePageIndicator) rootView.findViewById(R.id.pageIndicatorCircle);
         pageIndicatorCircle.setViewPager(viewPagerVertical);
         //TODO: handle on touch/swipe inside indicator
+
+        btnTakeSurvey = (Button) rootView.findViewById(R.id.btnTakeSurvey);
+        btnTakeSurvey.setOnClickListener(takeSurveyOnclickListener);
 
         ibRefresh = (ImageButton) getActivity().findViewById(R.id.toolbar).findViewById(R.id.ibLeft);
         ibRefresh.setOnClickListener(new View.OnClickListener() {
@@ -119,4 +126,16 @@ public class MainFragment extends Fragment {
         ibRefresh.setClickable(true);
     }
 
+    private View.OnClickListener takeSurveyOnclickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            Fragment showingFragment = fragmentManager.findFragmentById(R.id.contentContainer);
+            if(!(showingFragment instanceof  SecondFragment))
+            fragmentManager.beginTransaction()
+                    .replace(R.id.contentContainer,SecondFragment.newInstance())
+                    .addToBackStack(null)
+                    .commit();
+        }
+    };
 }
