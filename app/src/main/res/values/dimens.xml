@@ -7,4 +7,5 @@
     <dimen name="surveys_screen_description_text_size">24sp</dimen>
     <dimen name="surveys_screen_btn_text_size">18sp</dimen>
     <dimen name="page_indicator_radius">8dp</dimen>
+    <dimen name="btn_take_survey_margin_bottom">80dp</dimen>
 </resources>

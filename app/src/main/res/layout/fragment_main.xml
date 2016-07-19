@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="@dimen/btn_take_survey_margin_bottom"
         android:background="@drawable/btn_take_survey"
         android:text="@string/surveys_screen_btn_title"
         android:textSize="@dimen/surveys_screen_btn_text_size"
