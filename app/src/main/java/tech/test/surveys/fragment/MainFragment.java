@@ -92,7 +92,7 @@ public class MainFragment extends Fragment {
         btnTakeSurvey = (Button) rootView.findViewById(R.id.btnTakeSurvey);
         btnTakeSurvey.setOnClickListener(takeSurveyOnclickListener);
 
-        ibRefresh = (ImageButton) getActivity().findViewById(R.id.toolbar).findViewById(R.id.ibLeft);
+        ibRefresh = (ImageButton) getActivity().findViewById(R.id.toolbar).findViewById(R.id.ibRefresh);
         ibRefresh.setImageResource(R.drawable.ic_refresh_white_36dp);
         ibRefresh.setOnClickListener(refreshOnClickListener);
 
@@ -164,4 +164,6 @@ public class MainFragment extends Fragment {
             }
         }
     };
+
+
 }

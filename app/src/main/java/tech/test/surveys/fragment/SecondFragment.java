@@ -33,7 +33,7 @@ public class SecondFragment extends Fragment {
     }
 
     private void initInstances(View rootView) {
-        ibBack = (ImageButton) getActivity().findViewById(R.id.toolbar).findViewById(R.id.ibLeft);
+        ibBack = (ImageButton) getActivity().findViewById(R.id.toolbar).findViewById(R.id.ibBack);
         ibBack.setImageResource(R.drawable.ic_arrow_back_white_36dp);
         ibBack.setOnClickListener(backOnClickListener);
     }

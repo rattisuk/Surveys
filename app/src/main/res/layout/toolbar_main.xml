@@ -13,14 +13,25 @@
         android:layout_height="match_parent">
 
         <ImageButton
-            android:id="@+id/ibLeft"
+            android:id="@+id/ibRefresh"
             style="@style/Base.Widget.AppCompat.ActionButton"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_refresh_white_36dp" />
+
+        <ImageButton
+            android:id="@+id/ibBack"
+            style="@style/Base.Widget.AppCompat.ActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/ibRefresh"
+            android:layout_toEndOf="@id/ibRefresh"
+            android:src="@drawable/ic_arrow_back_white_36dp"
+            android:visibility="gone" />
 
         <TextView
             style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
