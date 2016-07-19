@@ -43,6 +43,7 @@ public class MainFragment extends Fragment {
     Button btnTakeSurvey;
 
     SurveyItemDao[] daos = null;
+    boolean isFirstTimeFetchData = true;
 
     public MainFragment() {
         super();
@@ -75,10 +76,12 @@ public class MainFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArray("daos", daos);
+        outState.putBoolean("isFirstTimeFetchData", isFirstTimeFetchData);
     }
 
     private void onRestoreInstanceState(Bundle savedInstanceState) {
         daos = (SurveyItemDao[]) savedInstanceState.getParcelableArray("daos");
+        isFirstTimeFetchData = savedInstanceState.getBoolean("isFirstTimeOpen");
     }
 
     @Override
@@ -107,8 +110,10 @@ public class MainFragment extends Fragment {
         ibRefresh.setImageResource(R.drawable.ic_refresh_white_36dp);
         ibRefresh.setOnClickListener(refreshOnClickListener);
 
-        if (savedInstanceState == null)
+        if (savedInstanceState == null && isFirstTimeFetchData) {
             loadSurveysData();
+            isFirstTimeFetchData = false;
+        }
 
     }
 
@@ -185,4 +190,5 @@ public class MainFragment extends Fragment {
             }
         }
     }
+
 }
