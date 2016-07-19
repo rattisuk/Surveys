@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
                     .commit();
         }
 
+        showVisibleMenu();
     }
 
     private void initInstances()
