@@ -73,6 +73,12 @@ public class MainFragment extends Fragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        currentPagePosition = viewPagerVertical.getCurrentItem();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         viewPagerVertical.setCurrentItem(currentPagePosition);
