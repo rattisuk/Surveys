@@ -36,6 +36,8 @@ import tech.test.surveys.view.VerticalViewPager;
  */
 public class MainFragment extends Fragment {
 
+    static int currentPagePosition = 0;
+
     VerticalViewPager viewPagerVertical;
     SurveyScreenPagerAdapter surveyViewPagerAdapter;
     CirclePageIndicator pageIndicatorCircle;
@@ -68,6 +70,12 @@ public class MainFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        viewPagerVertical.setCurrentItem(currentPagePosition);
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         MainBus.getInstance().unregister(this);
@@ -79,6 +87,7 @@ public class MainFragment extends Fragment {
         outState.putParcelableArray("daos", daos);
         outState.putBoolean("isLoading", isLoading);
         outState.putBoolean("isFirstTimeFetchData", isFirstTimeFetchData);
+        if (viewPagerVertical != null) currentPagePosition = viewPagerVertical.getCurrentItem();
     }
 
     private void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -182,6 +191,7 @@ public class MainFragment extends Fragment {
             Response<SurveyItemDao[]> response = event.getResponse();
             if (response.isSuccessful()) {
                 daos = response.body();
+                currentPagePosition = 0;
                 if (surveyViewPagerAdapter != null) surveyViewPagerAdapter.setDaos(daos);
                 if (viewPagerVertical != null) {
                     viewPagerVertical.getAdapter().notifyDataSetChanged();
