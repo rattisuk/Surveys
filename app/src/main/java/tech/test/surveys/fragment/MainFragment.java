@@ -43,6 +43,7 @@ public class MainFragment extends Fragment {
     Button btnTakeSurvey;
 
     SurveyItemDao[] daos = null;
+    boolean isLoading = false;
     boolean isFirstTimeFetchData = true;
 
     public MainFragment() {
@@ -76,11 +77,13 @@ public class MainFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArray("daos", daos);
+        outState.putBoolean("isLoading", isLoading);
         outState.putBoolean("isFirstTimeFetchData", isFirstTimeFetchData);
     }
 
     private void onRestoreInstanceState(Bundle savedInstanceState) {
         daos = (SurveyItemDao[]) savedInstanceState.getParcelableArray("daos");
+        isLoading = savedInstanceState.getBoolean("isLoading");
         isFirstTimeFetchData = savedInstanceState.getBoolean("isFirstTimeOpen");
     }
 
@@ -109,6 +112,7 @@ public class MainFragment extends Fragment {
         ibRefresh = (ImageButton) getActivity().findViewById(R.id.toolbar).findViewById(R.id.ibRefresh);
         ibRefresh.setImageResource(R.drawable.ic_refresh_white_36dp);
         ibRefresh.setOnClickListener(refreshOnClickListener);
+        if (isLoading) startRefreshAnimation();
 
         if (savedInstanceState == null && isFirstTimeFetchData) {
             loadSurveysData();
@@ -136,14 +140,18 @@ public class MainFragment extends Fragment {
     }
 
     private void startRefreshAnimation() {
+        isLoading = true;
         Animation anim = AnimationUtils.loadAnimation(getContext(), R.anim.rotate);
         ibRefresh.startAnimation(anim);
         ibRefresh.setClickable(false);
     }
 
     private void stopRefreshAnimation() {
-        ibRefresh.clearAnimation();
-        ibRefresh.setClickable(true);
+        isLoading = false;
+        if (ibRefresh != null) {
+            ibRefresh.clearAnimation();
+            ibRefresh.setClickable(true);
+        }
     }
 
     private View.OnClickListener refreshOnClickListener = new View.OnClickListener() {
