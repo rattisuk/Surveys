@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 
+import com.squareup.otto.Subscribe;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import java.io.IOException;
@@ -24,6 +25,8 @@ import retrofit2.Response;
 import tech.test.surveys.R;
 import tech.test.surveys.adapter.SurveyScreenPagerAdapter;
 import tech.test.surveys.dao.SurveyItemDao;
+import tech.test.surveys.eventbus.BusEventSurveyDataLoaded;
+import tech.test.surveys.eventbus.MainBus;
 import tech.test.surveys.manager.http.HTTPManager;
 import tech.test.surveys.util.Contextor;
 import tech.test.surveys.view.VerticalViewPager;
@@ -58,6 +61,14 @@ public class MainFragment extends Fragment {
 
         if (savedInstanceState != null)
             onRestoreInstanceState(savedInstanceState);
+
+        MainBus.getInstance().register(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        MainBus.getInstance().unregister(this);
     }
 
     @Override
@@ -108,26 +119,12 @@ public class MainFragment extends Fragment {
         call.enqueue(new Callback<SurveyItemDao[]>() {
             @Override
             public void onResponse(Call<SurveyItemDao[]> call, Response<SurveyItemDao[]> response) {
-                stopRefreshAnimation();
-                if (response.isSuccessful()) {
-                    daos = response.body();
-                    surveyViewPagerAdapter.setDaos(daos);
-                    viewPagerVertical.getAdapter().notifyDataSetChanged();
-                    if (daos.length > 0) viewPagerVertical.setCurrentItem(0);
-                    Toast.makeText(Contextor.getInstance().getContext(), "load success : " + daos.length + " item.", Toast.LENGTH_SHORT).show();
-                } else {
-                    try {
-                        Toast.makeText(Contextor.getInstance().getContext(), response.errorBody().string(), Toast.LENGTH_SHORT).show();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                }
+                MainBus.getInstance().post(new BusEventSurveyDataLoaded(true, response));
             }
 
             @Override
             public void onFailure(Call<SurveyItemDao[]> call, Throwable t) {
-                stopRefreshAnimation();
+                MainBus.getInstance().post(new BusEventSurveyDataLoaded(false, null));
                 Toast.makeText(Contextor.getInstance().getContext(), t.toString(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -165,5 +162,27 @@ public class MainFragment extends Fragment {
         }
     };
 
+    @Subscribe
+    public void BusEventSurveyDataLoaded(BusEventSurveyDataLoaded event) {
+        stopRefreshAnimation();
+        if (event.isSuccess()) {
+            Response<SurveyItemDao[]> response = event.getResponse();
+            if (response.isSuccessful()) {
+                daos = response.body();
+                if (surveyViewPagerAdapter != null) surveyViewPagerAdapter.setDaos(daos);
+                if (viewPagerVertical != null) {
+                    viewPagerVertical.getAdapter().notifyDataSetChanged();
+                    if (daos.length > 0) viewPagerVertical.setCurrentItem(0);
+                }
+                Toast.makeText(Contextor.getInstance().getContext(), "load success : " + daos.length + " item.", Toast.LENGTH_SHORT).show();
+            } else {
+                try {
+                    Toast.makeText(Contextor.getInstance().getContext(), response.errorBody().string(), Toast.LENGTH_SHORT).show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
+            }
+        }
+    }
 }
