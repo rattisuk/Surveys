@@ -27,6 +27,7 @@ import tech.test.surveys.adapter.SurveyScreenPagerAdapter;
 import tech.test.surveys.dao.SurveyItemDao;
 import tech.test.surveys.eventbus.BusEventSurveyDataLoaded;
 import tech.test.surveys.eventbus.MainBus;
+import tech.test.surveys.manager.SurveyListManager;
 import tech.test.surveys.manager.http.HTTPManager;
 import tech.test.surveys.util.Contextor;
 import tech.test.surveys.view.VerticalViewPager;
@@ -44,7 +45,7 @@ public class MainFragment extends Fragment {
     ImageButton ibRefresh;
     Button btnTakeSurvey;
 
-    SurveyItemDao[] daos = null;
+    SurveyListManager surveyListManager;
     boolean isLoading = false;
     boolean isFirstTimeFetchData = true;
 
@@ -62,6 +63,8 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        surveyListManager = SurveyListManager.getInstance();
 
         if (savedInstanceState != null)
             onRestoreInstanceState(savedInstanceState);
@@ -84,14 +87,15 @@ public class MainFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArray("daos", daos);
+        outState.putParcelableArray("daos", surveyListManager.getData());
         outState.putBoolean("isLoading", isLoading);
         outState.putBoolean("isFirstTimeFetchData", isFirstTimeFetchData);
         if (viewPagerVertical != null) currentPagePosition = viewPagerVertical.getCurrentItem();
     }
 
     private void onRestoreInstanceState(Bundle savedInstanceState) {
-        daos = (SurveyItemDao[]) savedInstanceState.getParcelableArray("daos");
+        SurveyItemDao[] daos = (SurveyItemDao[]) savedInstanceState.getParcelableArray("daos");
+        surveyListManager.setData(daos);
         isLoading = savedInstanceState.getBoolean("isLoading");
         isFirstTimeFetchData = savedInstanceState.getBoolean("isFirstTimeOpen");
     }
@@ -108,7 +112,6 @@ public class MainFragment extends Fragment {
 
         viewPagerVertical = (VerticalViewPager) rootView.findViewById(R.id.viewPagerVertical);
         surveyViewPagerAdapter = new SurveyScreenPagerAdapter();
-        surveyViewPagerAdapter.setDaos(daos);
         viewPagerVertical.setAdapter(surveyViewPagerAdapter);
 
         pageIndicatorCircle = (CirclePageIndicator) rootView.findViewById(R.id.pageIndicatorCircle);
@@ -190,14 +193,13 @@ public class MainFragment extends Fragment {
         if (event.isSuccess()) {
             Response<SurveyItemDao[]> response = event.getResponse();
             if (response.isSuccessful()) {
-                daos = response.body();
+                surveyListManager.setData(response.body());
                 currentPagePosition = 0;
-                if (surveyViewPagerAdapter != null) surveyViewPagerAdapter.setDaos(daos);
                 if (viewPagerVertical != null) {
                     viewPagerVertical.getAdapter().notifyDataSetChanged();
-                    if (daos.length > 0) viewPagerVertical.setCurrentItem(0);
+                    if (surveyListManager.getData().length > 0) viewPagerVertical.setCurrentItem(0);
                 }
-                Toast.makeText(Contextor.getInstance().getContext(), "load success : " + daos.length + " item.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Contextor.getInstance().getContext(), "load success : " + surveyListManager.getData().length + " item.", Toast.LENGTH_SHORT).show();
             } else {
                 try {
                     Toast.makeText(Contextor.getInstance().getContext(), response.errorBody().string(), Toast.LENGTH_SHORT).show();

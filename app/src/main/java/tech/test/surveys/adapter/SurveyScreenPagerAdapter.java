@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import tech.test.surveys.dao.SurveyItemDao;
+import tech.test.surveys.manager.SurveyListManager;
 import tech.test.surveys.view.SurveyScreenItem;
 
 /**
@@ -12,17 +13,12 @@ import tech.test.surveys.view.SurveyScreenItem;
  */
 public class SurveyScreenPagerAdapter extends PagerAdapter {
 
-    SurveyItemDao[] daos;
-
-    public void setDaos(SurveyItemDao[] daos) {
-        this.daos = daos;
-    }
-
     @Override
     public int getCount() {
-        if (daos == null)
+        SurveyItemDao[] dao = SurveyListManager.getInstance().getData();
+        if(dao == null)
             return 0;
-        return daos.length;
+        return dao.length;
     }
 
     @Override
@@ -34,7 +30,7 @@ public class SurveyScreenPagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         SurveyScreenItem v = new SurveyScreenItem(container.getContext());
 
-        SurveyItemDao dao = daos[position];
+        SurveyItemDao dao = SurveyListManager.getInstance().getData()[position];
         v.setTitleText(dao.getTitle());
         v.setDescriptionText(dao.getDescription());
         v.setImgUrl(dao.getCoverImageUrl());
