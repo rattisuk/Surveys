@@ -229,6 +229,9 @@ public class CirclePageIndicator extends View implements PageIndicator {
             shortPaddingBefore = getPaddingLeft();
         }
 
+        if(count * mRadius * 3 > longSize) {
+            mRadius = longSize / count / 3.0f;
+        }
         final float threeRadius = mRadius * 3;
         final float shortOffset = shortPaddingBefore + mRadius;
 
