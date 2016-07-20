@@ -4,8 +4,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-import com.viewpagerindicator.CirclePageIndicator;
-
 /**
  * Created by GOLF on 7/21/2016.
  */
