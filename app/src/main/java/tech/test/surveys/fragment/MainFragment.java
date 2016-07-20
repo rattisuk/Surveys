@@ -93,15 +93,14 @@ public class MainFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArray("daos", surveyListManager.getData());
+        outState.putBundle("surveyListManager", surveyListManager.onSaveInstanceState());
         outState.putBoolean("isLoading", isLoading);
         outState.putBoolean("isFirstTimeFetchData", isFirstTimeFetchData);
         if (viewPagerVertical != null) currentPagePosition = viewPagerVertical.getCurrentItem();
     }
 
     private void onRestoreInstanceState(Bundle savedInstanceState) {
-        SurveyItemDao[] daos = (SurveyItemDao[]) savedInstanceState.getParcelableArray("daos");
-        surveyListManager.setData(daos);
+        surveyListManager.onRestoreInstanceState(savedInstanceState.getBundle("surveyListManager"));
         isLoading = savedInstanceState.getBoolean("isLoading");
         isFirstTimeFetchData = savedInstanceState.getBoolean("isFirstTimeOpen");
     }

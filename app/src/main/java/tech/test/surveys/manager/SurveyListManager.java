@@ -2,6 +2,7 @@ package tech.test.surveys.manager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 
 import com.google.gson.Gson;
 
@@ -38,6 +39,16 @@ public class SurveyListManager {
 
     public SurveyItemDao[] getData() {
         return data;
+    }
+
+    public Bundle onSaveInstanceState(){
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArray("daos",data);
+        return bundle;
+    }
+
+    public void onRestoreInstanceState(Bundle savedInstanceState){
+        data = (SurveyItemDao[]) savedInstanceState.getParcelableArray("daos");
     }
 
     private void saveCache() {
