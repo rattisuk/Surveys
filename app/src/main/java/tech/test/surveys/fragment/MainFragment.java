@@ -30,6 +30,7 @@ import tech.test.surveys.eventbus.MainBus;
 import tech.test.surveys.manager.SurveyListManager;
 import tech.test.surveys.manager.http.HTTPManager;
 import tech.test.surveys.util.Contextor;
+import tech.test.surveys.view.UntouchableCirclePageIndicator;
 import tech.test.surveys.view.VerticalViewPager;
 
 /**
@@ -41,7 +42,7 @@ public class MainFragment extends Fragment {
 
     VerticalViewPager viewPagerVertical;
     SurveyScreenPagerAdapter surveyViewPagerAdapter;
-    CirclePageIndicator pageIndicatorCircle;
+    UntouchableCirclePageIndicator pageIndicatorCircle;
     ImageButton ibRefresh;
     Button btnTakeSurvey;
 
@@ -119,9 +120,8 @@ public class MainFragment extends Fragment {
         surveyViewPagerAdapter = new SurveyScreenPagerAdapter();
         viewPagerVertical.setAdapter(surveyViewPagerAdapter);
 
-        pageIndicatorCircle = (CirclePageIndicator) rootView.findViewById(R.id.pageIndicatorCircle);
+        pageIndicatorCircle = (UntouchableCirclePageIndicator) rootView.findViewById(R.id.pageIndicatorCircle);
         pageIndicatorCircle.setViewPager(viewPagerVertical);
-        //TODO: handle on touch/swipe inside indicator
 
         btnTakeSurvey = (Button) rootView.findViewById(R.id.btnTakeSurvey);
         btnTakeSurvey.setOnClickListener(takeSurveyOnclickListener);
