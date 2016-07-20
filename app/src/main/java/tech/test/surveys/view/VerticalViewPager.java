@@ -33,6 +33,8 @@ public class VerticalViewPager extends ViewPager {
     }
 
     private class VerticalPageTransformer implements ViewPager.PageTransformer {
+        private static final float MIN_SCALE = 0.5f;
+        private static final float MIN_ALPHA = 0.5f;
 
         @Override
         public void transformPage(View view, float position) {
@@ -50,6 +52,16 @@ public class VerticalViewPager extends ViewPager {
                 //set Y position to swipe in from top
                 float yPosition = position * view.getHeight();
                 view.setTranslationY(yPosition);
+
+                float scaleFactor = Math.max(MIN_SCALE, 1 - Math.abs(position));
+                // Scale the page down (between MIN_SCALE and 1)
+                view.setScaleX(scaleFactor);
+                view.setScaleY(scaleFactor);
+
+                // Fade the page relative to its size.
+                view.setAlpha(MIN_ALPHA +
+                        (scaleFactor - MIN_SCALE) /
+                                (1 - MIN_SCALE) * (1 - MIN_ALPHA));
 
             } else { // (1,+Infinity]
                 // This page is way off-screen to the right.
